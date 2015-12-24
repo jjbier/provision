@@ -1,0 +1,22 @@
+# inventory file for production servers
+# this file is the stage file, use with ansible-playbook -i inventories/production_servers site.yml
+
+[app-webservers]
+centos-webserver
+
+[app-webservers:vars]
+ansible_ssh_port=300 
+ansible_ssh_host=sym01.cfs.dev 
+ansible_ssh_user=cfs
+nfs_server_directories=192.168.11.6
+nfs_server_ftp_users=192.168.11.8
+
+[app-crons]
+centos-cron
+
+[app-crons:vars]
+ansible_ssh_port=300 
+ansible_ssh_host=sym02.cfs.dev 
+ansible_ssh_user=cfs
+nfs_server_directories=192.168.11.6
+nfs_server_ftp_users=192.168.11.8

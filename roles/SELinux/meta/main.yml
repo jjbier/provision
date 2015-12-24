@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Xabier Fernández Rodríguez
+  description: Server common configuration 
+  company: Confirmsign
+  license: license MIT
+  min_ansible_version: 1.2
+  platforms:
+  - name: EL
+    versions:
+    - 6
+  - name: Debian
+    versions:
+    - jessie
+  categories:
+    - system
+dependencies: []

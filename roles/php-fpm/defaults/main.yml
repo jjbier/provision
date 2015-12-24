@@ -1,0 +1,36 @@
+---
+# defaults file for php-fpm
+php_fpm_user: confirmsign.com
+default_owner: www-data
+php_fpm_group: www-data
+
+php_fpm_port_range: "9001-9010"
+
+# Ondemand for low-traffic sites, dynamic for high-traffic on shared pools, and static when box dedicated to single site
+php_fpm_type: dynamic
+
+# Used by ondemand, dynamic and static
+php_fpm_max_children: 5 
+
+# Used only when pm_type = dynamic
+# These are absurdly low, just as safe defaults
+# Make sure to also increase pm_max_children
+php_fpm_start_servers: 2 # Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
+php_fpm_min_spare_servers: 1
+php_fpm_max_spare_servers: 3
+
+# Restart php worker after this many requests to prevent memory leaks from blowing up
+php_fpm_max_requests: 1000
+
+# Prevents arbitrary environment variables from reaching FPM worker processes by clearing the environment in workers before env vars specified in this pool configuration are added.
+php_fpm_clear_env: no
+
+# Ensure worker stdout and stderr are sent to the main error log.
+php_fpm_catch_workers_output: yes
+
+# Extra params for server proxy
+php_fpm_extra_fastcgi_params: ''
+
+php_memory_limit: "128M"
+
+php_max_input_vars: "1000"

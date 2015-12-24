@@ -1,0 +1,3 @@
+- name: (Redhat) ensure the php-fpm is installed on Redhat derivates.
+  yum: name=php-fpm state=present
+  tags: php-fpm

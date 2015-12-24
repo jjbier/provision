@@ -1,0 +1,9 @@
+---
+# tasks file for ntp (RedHat specific)
+
+- name: (RedHat) install ntp packages
+  yum: name={{ item }} state=present
+  with_items:     
+    - ntp
+    - ntpdate
+  tags: ntp

@@ -1,0 +1,12 @@
+--- 
+- 
+  hosts: all
+  sudo: true
+  roles: 
+    - common
+    - nfs-client    
+    - python
+    - SELinux    
+    - ntp
+
+- include: webserver.yml

@@ -1,0 +1,5 @@
+---
+# tasks file for selinux
+- include: RedHat.yml
+  when: ansible_os_family == "RedHat"
+  tags: selinux

@@ -1,0 +1,6 @@
+
+nfs_directories_extra:
+  - { src: '192.168.11.6:/var/nfs/mrwburofax.es/_log',     name: '/media/mrwburofax.es/_log',     fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: '192.168.11.6:/var/nfs/mrwburofax.es/_file',    name: '/media/mrwburofax.es/_file',    fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: '192.168.11.6:/var/nfs/mrwburofax.es/_themes',  name: '/media/mrwburofax.es/_themes',  fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: '192.168.11.6:/var/nfs/mrwburofax.es/_filetmp', name: '/media/mrwburofax.es/_filetmp', fstype: 'nfs4', opts: 'intr,hard' }

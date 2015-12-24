@@ -1,0 +1,7 @@
+---
+# tasks file for python
+- name: (RedHat) install python.
+  when: ansible_os_family == 'RedHat'
+  include: RedHat.yml
+  tags: 
+    - python  

@@ -1,0 +1,7 @@
+# defaults file for ntp
+---
+ntp_upstream :
+  - 0.{ntp_zone}.pool.ntp.org
+  - 1.{ntp_zone}.pool.ntp.org
+  - 2.{ntp_zone}.pool.ntp.org
+  - 3.{ntp_zone}.pool.ntp.org

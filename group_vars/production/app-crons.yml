@@ -1,0 +1,5 @@
+nfs_directories_extra:
+  - { src: '192.168.11.6:/var/nfs/confirmsign.com/_log',     name: '/mnt/confirmsign.com/_log',     fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: '192.168.11.6:/var/nfs/confirmsign.com/_file',    name: '/mnt/confirmsign.com/_file',    fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: '192.168.11.6:/var/nfs/confirmsign.com/_themes',  name: '/mnt/confirmsign.com/_themes',  fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: '192.168.11.6:/var/nfs/confirmsign.com/_filetmp', name: '/mnt/confirmsign.com/_filetmp', fstype: 'nfs4', opts: 'intr,hard' }

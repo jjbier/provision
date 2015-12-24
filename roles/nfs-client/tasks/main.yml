@@ -1,0 +1,16 @@
+---
+# tasks file for nfs-client
+- include: RedHat.yml
+  when: "ansible_os_family == 'RedHat'"
+  tags:
+    - nfs-client
+
+- name: "(System) mount confirmsign dirs "
+  mount: name='{{item.name}}' src='{{item.src}}' fstype='{{item.fstype}}' opts='{{item.opts}}' state=mounted
+  with_items: nfs_directories 
+
+- name: "(System) mount confirmsign dirs extra"
+  mount: name='{{item.name}}' src='{{item.src}}' fstype='{{item.fstype}}' opts='{{item.opts}}' state=mounted
+  with_items: nfs_directories_extra
+  when: nfs_directories_extra is defined and item > 0
+ 

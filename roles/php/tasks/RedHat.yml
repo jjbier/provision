@@ -1,0 +1,35 @@
+---
+- name: (RedHat) add PHP repo file.
+  template: src=redhat.repo.j2 dest=/etc/yum.repos.d/remi.repo owner=root group=root mode=0644
+
+- name: (RedHat) add PHP repo key.
+  copy: src=RPM-GPG-KEY-remi dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-remi owner=root group=root mode=0644
+
+- name: (RedHat) upgrade all packages.
+  yum: name=* state=latest
+
+- name: (RedHat) Ensure PHP packages are installed...
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items: php_packages
+  tags:
+    - php
+
+
+- name: (RedHat) ensure PHP packages are installed for development hosts.
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items: php_develop_packages
+  when: environment is defined and ( environment == "development")
+  tags:
+    - php
+
+- name: (RedHat) add PHP config file.
+  template: src="php.ini-production.j2" dest=/etc/php.ini owner=root group=root mode=0644
+  when: environment == "prod" or environment is not defined
+
+- name: (RedHat) add PHP config file.
+  template: src="php.ini-development.j2" dest=/etc/php.ini owner=root group=root mode=0644
+  when: environment is defined and environment == "dev"

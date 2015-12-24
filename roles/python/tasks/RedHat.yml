@@ -1,0 +1,9 @@
+---
+- name: (RedHat) python packages...
+  yum: name={{item}} state=latest
+  with_items: 
+    - python
+    - libselinux-python
+    - policycoreutils-python
+  tags: 
+    - python

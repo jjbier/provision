@@ -1,0 +1,52 @@
+---
+# tasks file for php-fpm
+- name: "Load the OS specific variables"
+  tags: 
+    - php-fpm
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+  tags:
+    - php-fpm
+
+# - name: (System) Ensure master configuration is in place
+#   tags: php-fpm
+#   template: src={{ item.name + '.j2' }} dest={{ item.path + '/' + item.name }} owner=root group=root mode=0640
+#   with_items:
+#     - { name: php-fpm.conf, path: "{{ config_directory }}" }
+#     - { name: www.conf, path: "{{ pool_directory }}" }
+#   notify: reload php-fpm
+
+# - name: Ensure fpm users are available
+#   tags: 
+#     - php-fpm
+#     - user
+#   user: name={{ item.owner }} shell=/bin/bash createhome=yes state=present generate_ssh_key=true home={{ item.home|default("/home/" + item.owner) }}
+#   with_items: vhosts
+#   when: 
+#     - item.owner != default_owner
+
+# - name: Ensure home directories have sufficient privileges for webserver
+#   tags: php-fpm
+#   file: path={{ item.home|default("/home/" + item.owner) + '/' }} owner={{ item.owner }} group={{ php_fpm_group }} mode=0710
+#   with_items: vhosts
+#   when:
+#     - item.owner != default_owner
+
+# - name: Ensure all pools are available
+#   tags: php-fpm
+#   template: src=pool.conf.j2 dest={{ pool_directory + '/' + item.owner|default(default_owner) + '.conf' }} owner={{ item.owner|default(default_owner) }} group={{ item.owner|default(default_owner) }} mode=0600
+#   with_items: vhosts
+#   notify: reload php-fpm
+#   when: 
+#     - item.owner != default_owner
+
+
+# - name: Ensure php-fpm can run on another ports (selinux) and allow server to connect to it
+#   tags: php-fpm
+#   seport: ports={{ php_fpm_port_range }} proto=tcp setype=http_port_t state=present reload=true
+
+# - name: Ensure php-fpm is running
+#   tags: php-fpm
+#   service: name={{ service }} state=started enabled=yes

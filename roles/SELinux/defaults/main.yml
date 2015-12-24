@@ -1,0 +1,4 @@
+---
+# defaults file for selinux
+selinux_policy: targeted
+selinux_state: permissive

@@ -1,0 +1,14 @@
+nfs_servers:
+  - directories: nfs.cfs.dev
+  - ftp_users:   nfs.cfs.dev
+  - as2:         nfs.cfs.dev
+
+nfs_directories: 
+  - { src: 'nfs.cfs.dev:/var/nfs/_log',      name: '/media/confirmsign.com/_log',     fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: 'nfs.cfs.dev:/var/nfs/_file',     name: '/media/confirmsign.com/_file',    fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: 'nfs.cfs.dev:/var/nfs/_themes',   name: '/media/confirmsign.com/_themes',  fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: 'nfs.cfs.dev:/var/nfs/_filetmp',  name: '/media/confirmsign.com/_filetmp', fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: 'nfs.cfs.dev:/var/nfs/_ftp',      name: '/media/confirmsign.com/_ftp',     fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: 'nfs.cfs.dev:/var/nfs/AS2',       name: '/media/AS2',                      fstype: 'nfs4', opts: 'intr,hard' }
+  - { src: 'nfs.cfs.dev:/var/nfs/iadi',      name: '/media/iadi',                      fstype: 'nfs4', opts: 'intr,hard' }
+

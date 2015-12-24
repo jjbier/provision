@@ -1,0 +1,20 @@
+---
+# tasks file for ntp
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: 
+  - ntp
+
+- name: (RedHat) pkg install
+  when: ansible_os_family == 'RedHat'
+  include: RedHat.yml
+  tags:
+    - ntp
+- name: configure...
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf mode=644 owner=root group=root
+  notify: restart ntp
+  tags: ntp
+
+- name: Ensure ntp service is started and enabled on boot
+  service: name={{ntp_service_name}} state=started enabled=yes
+  tags: ntp
