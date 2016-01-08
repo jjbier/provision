@@ -1,0 +1,7 @@
+nodejs_modules:
+  - nodejs
+  - npm
+
+nodejs_npm_modules:
+  - bower
+  - gulp

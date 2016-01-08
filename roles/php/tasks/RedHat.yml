@@ -13,23 +13,16 @@
     name: "{{ item }}"
     state: installed
   with_items: php_packages
-  tags:
-    - php
-
 
 - name: (RedHat) ensure PHP packages are installed for development hosts.
   yum:
     name: "{{ item }}"
     state: installed
   with_items: php_develop_packages
-  when: environment is defined and ( environment == "development")
-  tags:
-    - php
+  when: stage == "develop"
 
 - name: (RedHat) add PHP config file.
-  template: src="php.ini-production.j2" dest=/etc/php.ini owner=root group=root mode=0644
-  when: environment == "prod" or environment is not defined
+  template: src="php.ini-{{stage}}.j2" dest=/etc/php.ini owner=root group=root mode=0644
 
-- name: (RedHat) add PHP config file.
-  template: src="php.ini-development.j2" dest=/etc/php.ini owner=root group=root mode=0644
-  when: environment is defined and environment == "dev"
+- name: Install browscap.
+  copy: src=browscap.ini dest=/etc/php.d/20-browscap.ini owner=root group=root mode=0644

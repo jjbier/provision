@@ -1,0 +1,24 @@
+---
+# tasks file for composer
+- name: Download composer package
+  get_url: url='https://getcomposer.org/installer' dest='/usr/src/composer-instaler' mode=0770
+
+- name: Install composer
+  command: 'php composer-instaler --install-dir={{ composer_install_dir }}'
+  args:
+    chdir: /usr/src/
+    creates: '{{ composer_install_dir }}/composer.phar'
+
+- name: Rename - composer.phar -> composer
+  command: "mv {{ composer_install_dir }}/composer.phar {{ composer_install_dir }}/composer"
+  args:
+    chdir: '{{ composer_install_dir }}'
+    creates: '{{ composer_install_dir }}/composer'
+
+- name: Check permissions
+  file: path="{{ composer_install_dir }}/composer" owner=root group=root mode=0755
+
+- name: update to the latest version
+  command: "{{ composer_install_dir }}/composer self-update"
+  register: composer_self_update
+  changed_when: "'Updating to version' in composer_self_update.stderr"

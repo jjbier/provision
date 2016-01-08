@@ -12,9 +12,9 @@
     - ntp
 - name: configure...
   template: src=ntp.conf.j2 dest=/etc/ntp.conf mode=644 owner=root group=root
-  notify: restart ntp
+  notify: restarted ntpd
   tags: ntp
 
 - name: Ensure ntp service is started and enabled on boot
-  service: name={{ntp_service_name}} state=started enabled=yes
+  service: name={{ntp_service_name}} state=started
   tags: ntp

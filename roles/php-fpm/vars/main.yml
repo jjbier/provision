@@ -1,2 +1,10 @@
 ---
 # vars file for php-fpm
+env:
+ RUNLEVEL: 1
+ HOSTNAME: $HOSTNAME
+ PATH: /usr/local/bin:/usr/bin:/bin
+ TMP: /tmp
+ TMPDIR: /tmp
+ TEMP: /tmp
+

@@ -1,0 +1,4 @@
+---
+# vars file for mysql
+env:
+ RUNLEVEL: 1

@@ -1,5 +1,7 @@
 ---
 # handlers file for php-fpm
+- name: restart php-fpm
+  service: name={{php_fpm_binary_name}} state=restarted
+
 - name: reload php-fpm
-  tags: php-fpm
-  service: name={{ service }} state={{ state }}
+  service: name={{php_fpm_binary_name}} state=reloaded

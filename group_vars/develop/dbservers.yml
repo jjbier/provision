@@ -1,0 +1,9 @@
+---
+mysql_db: 
+ - name: 'cfs_admin_2_0'
+
+mysql_users: 
+  - name: 'myconfirms'
+    pass: 'Impresionant3'
+    priv: '*.*:ALL'
+    host: '%'

@@ -7,46 +7,54 @@
 
 - include: RedHat.yml
   when: ansible_os_family == 'RedHat'
-  tags:
-    - php-fpm
 
-# - name: (System) Ensure master configuration is in place
-#   tags: php-fpm
-#   template: src={{ item.name + '.j2' }} dest={{ item.path + '/' + item.name }} owner=root group=root mode=0640
-#   with_items:
-#     - { name: php-fpm.conf, path: "{{ config_directory }}" }
-#     - { name: www.conf, path: "{{ pool_directory }}" }
-#   notify: reload php-fpm
+- name: Copy default FPM configuration file
+  template: dest={{ php_fpm_config_path }} src=php-fpm.conf.j2
+  tags: php-fpm
 
-# - name: Ensure fpm users are available
-#   tags: 
-#     - php-fpm
-#     - user
-#   user: name={{ item.owner }} shell=/bin/bash createhome=yes state=present generate_ssh_key=true home={{ item.home|default("/home/" + item.owner) }}
-#   with_items: vhosts
-#   when: 
-#     - item.owner != default_owner
+- name: Copy the FPM configuration
+  ini_file: >
+    dest={{ php_fpm_config_path }}
+    section="{{ item.section }}"
+    option="{{ item.option }}"
+    value="{{ item.value }}"
+    backup=yes
+  with_items: php_fpm_config
+  register: copy_fpm_config
 
-# - name: Ensure home directories have sufficient privileges for webserver
-#   tags: php-fpm
-#   file: path={{ item.home|default("/home/" + item.owner) + '/' }} owner={{ item.owner }} group={{ php_fpm_group }} mode=0710
-#   with_items: vhosts
-#   when:
-#     - item.owner != default_owner
+- name: Delete the include line from the ini file
+  ini_file: >
+    dest={{ php_fpm_config_path }}
+    section=global
+    option=include
+    state=absent
+    backup=no
+  when: copy_fpm_config.changed
 
-# - name: Ensure all pools are available
-#   tags: php-fpm
-#   template: src=pool.conf.j2 dest={{ pool_directory + '/' + item.owner|default(default_owner) + '.conf' }} owner={{ item.owner|default(default_owner) }} group={{ item.owner|default(default_owner) }} mode=0600
-#   with_items: vhosts
-#   notify: reload php-fpm
-#   when: 
-#     - item.owner != default_owner
+- name: Readd the include line to the ini file
+  ini_file: >
+    dest={{ php_fpm_config_path }}
+    section=global
+    option=include
+    value="{{ php_fpm_pool_d }}/*.conf"
+    state=present
+    backup=no
+  when: copy_fpm_config.changed
 
+- name: Delete the default POOL configuration file
+  file: >
+    path={{ php_fpm_pool_d }}/{{ php_fpm_default_pool.name }}
+    state=absent
+  when: php_fpm_default_pool.delete
 
-# - name: Ensure php-fpm can run on another ports (selinux) and allow server to connect to it
-#   tags: php-fpm
-#   seport: ports={{ php_fpm_port_range }} proto=tcp setype=http_port_t state=present reload=true
+- name: Copy the POOL configurations
+  template: >
+    src=pool.conf.j2
+    dest={{ php_fpm_pool_d }}/{{ item['name'] }}.conf
+    backup=yes
+  with_items: php_fpm_pools
+  when: php_fpm_pools|lower != 'none'
+  notify: restart php-fpm
 
-# - name: Ensure php-fpm is running
-#   tags: php-fpm
-#   service: name={{ service }} state=started enabled=yes
+- name: Start the php5-fpm service
+  service: name={{ php_fpm_service_name }} state=started

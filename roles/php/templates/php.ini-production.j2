@@ -1,3 +1,6 @@
+; {{ ansible_managed }}
+; Manual customization of this file is not recommended.
+
 [PHP]
 
 ;;;;;;;;;;;;;;;;;;;
@@ -796,7 +799,7 @@ file_uploads = On
 
 ; Maximum allowed size for uploaded files.
 ; http://php.net/upload-max-filesize
-upload_max_filesize = 2M
+upload_max_filesize = {{upload_max_filesize}}
 
 ; Maximum number of files that can be uploaded via a single request
 max_file_uploads = 20
@@ -1269,7 +1272,7 @@ bcmath.scale = 0
 
 [browscap]
 ; http://php.net/browscap
-;browscap = extra/browscap.ini
+browscap = browscap = /etc/php.d/20-browscap.ini
 
 [Session]
 ; Handler used to store/retrieve data.

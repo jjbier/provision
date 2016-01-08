@@ -1,0 +1,8 @@
+---
+# vars file for memcached
+git_packages:
+  - git
+
+git_user_name: confirmsign
+git_user_email:  info@confirmsign.com
+git_core_editor: nano

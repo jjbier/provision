@@ -1,0 +1,9 @@
+---
+# defaults file for memcached
+memcached_start: true
+memcached_start_on_boot: true
+
+memcached_address: 127.0.0.1
+memcached_port: 11211
+memcached_memory: 64
+memcached_connections: 1024

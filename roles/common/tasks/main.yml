@@ -1,27 +1,25 @@
 ---
-# tasks file for common
-- name:  (System) create admin group
-  group: name=admins state=present
-
-- name:  (System) create develop group.
-  group: name=develops state=present
-
-- name:  (System) create deployer group.
-  group: name=deployers state=present
-
-- name: (System) create admin user.
-  user: name=cfs comment="Default administrator user"  uid=2001 group=admins
-
-- name: (System) create deployer user.
-  user: name=devops comment="Default develop user"  uid=2002 group=develops
-
-- name: (System) create deployer user.
-  user: name=deployer comment="Default deployer user"  uid=2003 group=deployers
-
 - name: (RedHat) upgrade all packages.
   yum:  name=* state=latest
   when: ansible_os_family == 'RedHat'
 
-- name: (RedHat) upgrade all packages.
-  yum:  name=nano state=present
+- name: (RedHat) Install basic development tools.
+  yum:  name={{item}} state=present
   when: ansible_os_family == 'RedHat'
+  with_items:
+    - nano
+    - autoconf
+    - automake
+    - binutils
+    - gcc
+    - gcc-c++
+    - gettext
+    - libtool
+    - make
+
+- name: Copy files to /etc/skel
+  copy: src='{{item}}'  dest='/etc/skel/.{{item}}' owner=root group=root mode=0644
+  with_items: files_in_role
+
+- name: Add ssh key
+  authorized_key: user=root key="{{ default_ssh_pub_key | default(lookup('file', '~/.ssh/id_rsa.pub')) }}" state=present

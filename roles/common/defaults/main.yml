@@ -1,2 +1,6 @@
 ---
 # defaults file for common
+files_in_role: 
+  - bash_aliases
+  - bash_git
+  - vimrc

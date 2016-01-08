@@ -1,7 +1,0 @@
---- 
-- 
-  hosts: app-webservers
-  sudo: true
-  roles: 
-    - php
-    - nginx

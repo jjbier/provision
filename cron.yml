@@ -1,6 +1,0 @@
---- 
-- 
-  hosts: app-crons
-  sudo: true
-  roles: 
-    - php

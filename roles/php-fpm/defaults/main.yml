@@ -1,35 +1,52 @@
 ---
-# defaults file for php-fpm
-php_fpm_user: confirmsign.com
-default_owner: www-data
-php_fpm_group: www-data
+enable_nginx: true
+php_fpm_listen:  9000
 
-php_fpm_port_range: "9001-9010"
+php_fpm_pools:
+ - name: fenec
+   user: www-data
+   group: www-data
+   listen: '127.0.0.1:{{php_fpm_listen}}'
+   chdir: /
 
-# Ondemand for low-traffic sites, dynamic for high-traffic on shared pools, and static when box dedicated to single site
-php_fpm_type: dynamic
+php_fpm_pool_defaults:
+  # Ondemand for low-traffic sites, dynamic for high-traffic on shared pools, and static when box dedicated to single site
+  pm: dynamic
+  # Used by ondemand, dynamic and static
+  pm.max_children: "{{ ansible_processor_vcpus * 2 }}"
+  # Used only when pm_type = dynamic
+  # These are absurdly low, just as safe defaults
+  # Make sure to also increase pm_max_children  
+  # Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
+  pm.start_servers: 2
+  pm.min_spare_servers: 1
+  pm.max_spare_servers: 3
+  pm.status_path: /status
+  # Restart php worker after this many requests to prevent memory leaks from blowing up  
+  pm.max_requests: 10000
 
-# Used by ondemand, dynamic and static
-php_fpm_max_children: 5 
+php_fpm_default_pool:
+  delete: yes
+  name: www.conf
 
-# Used only when pm_type = dynamic
-# These are absurdly low, just as safe defaults
-# Make sure to also increase pm_max_children
-php_fpm_start_servers: 2 # Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
-php_fpm_min_spare_servers: 1
-php_fpm_max_spare_servers: 3
+php_fpm_ini:
+ - option: "engine"
+   section: "PHP"
+   value: "1"
+ - option: "error_reporting"
+   section: "PHP"
+   value: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 
-# Restart php worker after this many requests to prevent memory leaks from blowing up
-php_fpm_max_requests: 1000
+php_fpm_config:
+ - option: "error_log"
+   section: "global"
+   value: "/var/log/php5-fpm.log"
 
-# Prevents arbitrary environment variables from reaching FPM worker processes by clearing the environment in workers before env vars specified in this pool configuration are added.
-php_fpm_clear_env: no
-
-# Ensure worker stdout and stderr are sent to the main error log.
-php_fpm_catch_workers_output: yes
 
 # Extra params for server proxy
 php_fpm_extra_fastcgi_params: ''
+
+#php custom config vars 
 
 php_memory_limit: "128M"
 

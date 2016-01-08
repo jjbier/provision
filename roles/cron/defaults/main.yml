@@ -1,0 +1,8 @@
+---
+# defaults file for cron
+# start on boot
+cron_service_enabled: yes
+# current state: started, stopped
+cron_service_state: started
+# The specific user whose crontab should be modified.
+cron_service_default_user: root

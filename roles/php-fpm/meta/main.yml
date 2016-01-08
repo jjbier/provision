@@ -13,5 +13,4 @@ galaxy_info:
     - web
 dependencies: 
   - php
-  - nginx
   - SELinux

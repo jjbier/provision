@@ -1,0 +1,5 @@
+---
+# tasks file for wkhtmltopdf
+- name: (RedHat) install wkhtmltox.
+  when: ansible_os_family == 'RedHat'
+  include: RedHat.yml

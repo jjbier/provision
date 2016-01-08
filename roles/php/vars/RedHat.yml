@@ -15,8 +15,10 @@ php_packages:
   - php-curl
   - php-pecl-memcache
   - php-pecl-apcu
+  - php-pecl-inotify
 
-php_develop_packages: []
+php_develop_packages: 
+  - php-pecl-xdebug
 
 #configs 
 config_directory: /etc

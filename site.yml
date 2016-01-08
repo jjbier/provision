@@ -1,12 +1,25 @@
 --- 
-- 
-  hosts: all
-  sudo: true
-  roles: 
-    - common
-    - nfs-client    
-    - python
-    - SELinux    
-    - ntp
+# - hosts: all
+#   become: true
+#   become_method: sudo
+#   roles: 
+#     - python
+#     - common
+#     - SELinux
+#     - ntp
+#     - users
 
-- include: webserver.yml
+# - hosts: cfs_app
+#   become: true
+#   become_method: sudo
+#   roles: 
+#     - nfs-client
+#     - memcached
+#     - php
+#     - composer
+#     - wkhtmltopdf
+#     - git
+
+- include: webservers.yml
+# - include: demons.yml
+# - include: dbservers.yml

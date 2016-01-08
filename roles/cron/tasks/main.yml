@@ -1,0 +1,30 @@
+---
+# tasks file for cron
+
+- include: vars.yml
+  tags:
+    - system
+    - cron
+    - vars
+    - cron-vars
+
+- include: install.yml
+  tags:
+    - system
+    - cron
+    - install
+    - cron-install
+
+- include: config.yml
+  tags:
+    - system
+    - cron
+    - config
+    - cron-config
+
+- include: service.yml
+  tags:
+    - system
+    - cron
+    - service
+    - cron-service

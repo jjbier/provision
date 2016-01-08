@@ -1,3 +1,12 @@
 - name: (Redhat) ensure the php-fpm is installed on Redhat derivates.
   yum: name=php-fpm state=present
   tags: php-fpm
+
+- name: Copy the PHP configuration file
+  ini_file: >
+    dest={{ php_fpm_ini_path }}
+    section="{{ item.section }}"
+    option="{{ item.option }}"
+    value="{{ item.value }}"
+    state=present
+  with_items: php_fpm_ini
