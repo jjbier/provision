@@ -55,4 +55,4 @@ users:
      - "{{default_ssh_pub_key}}"
    ssh_key_type: rsa
    ssh_key_bits: 2048
-   ssh_key_generate: yes   
+   ssh_key_generate: yes 

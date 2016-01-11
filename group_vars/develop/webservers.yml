@@ -1,4 +1,4 @@
 # Configure ssl 
-nginx_use_ssl: true
+nginx_use_ssl: false
 nginx_spdy_enabled: true
-nginx_ssl_local_path: '~/certificados/'
+nginx_ssl_local_path: '~/certificados'

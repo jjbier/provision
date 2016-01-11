@@ -12,8 +12,6 @@ sym02.cfs.dev
 
 # Data base servers
 [dbservers]
-192.168.11.7
-
 
 [cfs_app:children]
 webservers
@@ -24,21 +22,16 @@ webservers
 demons
 dbservers
 
-
 [webservers:vars]
 ansible_ssh_port=300 
 ansible_ssh_host=sym01.cfs.dev 
 ansible_ssh_user=cfs
 
 [demons:vars]
-ansible_ssh_port=300 
+ansible_ssh_port=22 
 ansible_ssh_host=sym02.cfs.dev 
 ansible_ssh_user=cfs
 
-[dbservers:vars]
-ansible_ssh_port=300
-ansible_ssh_host=db.confirmsign.dev 
-ansible_ssh_user=cfs
 
 [cfs_app:vars]
 nfs_server_directories=192.168.11.6
