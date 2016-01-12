@@ -1,6 +1,0 @@
---- 
-- hosts: demons
-  become: true
-  become_method: sudo  
-  roles: 
-    - cron

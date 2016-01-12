@@ -1,4 +1,16 @@
-# Configure ssl 
-nginx_use_ssl: false
-nginx_spdy_enabled: true
-nginx_ssl_local_path: '~/certificados'
+---
+
+nginx_servers_name:
+  - "{{ ansible_nodename }}"
+  - "localhost"
+  - "app.confirmsign.dev"
+  - "1-us.dev"
+  - "box-m.dev"
+  - "correosverificado.dev"
+  - "m-cfs.dev"
+  - "mrwburofax.dev"
+easyMobil_servers_name:
+  - '0-us.dev'
+  - 'box-b.dev'
+  - 'e-cfs.dev'
+  - 'm-rch.dev'

@@ -20,6 +20,22 @@
     - wkhtmltopdf
     - git
 
-- include: webservers.yml
-- include: demons.yml
-- include: dbservers.yml
+- hosts: webservers
+  become: true
+  become_method: sudo
+  roles:     
+    - nginx
+    - php-fpm
+    - nodejs
+
+- hosts: demons
+  become: true
+  become_method: sudo  
+  roles: 
+    - cron
+
+- hosts: dbservers
+  become: true
+  become_method: sudo
+  roles: 
+    - { role: mysql, when: "stage=='develop'" }

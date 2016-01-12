@@ -1,5 +1,0 @@
-- hosts: dbservers
-  become: true
-  become_method: sudo
-  roles: 
-    - { role: mysql, when: "stage=='develop'" }

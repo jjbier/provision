@@ -1,7 +1,0 @@
-- hosts: webservers
-  become: true
-  become_method: sudo
-  roles:     
-    - nginx
-    - php-fpm
-    - nodejs

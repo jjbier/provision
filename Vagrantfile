@@ -12,10 +12,13 @@ Vagrant.configure('2') do |config|
     # Add autorization key with ssh user keys
     config.vm.provision "file",   source: "~/.ssh/id_rsa.pub", destination: "/tmp/authorized_keys"
     config.vm.provision "shell",  inline: 'echo `cat /tmp/authorized_keys` >> /home/vagrant/.ssh/authorized_keys'
+    
+
 
     config.vm.define "api3" do |api3|
         api3.vm.network :private_network, ip: "192.168.200.101"
         api3.vm.hostname = 'api3.confirmsign.lo' 
+
         config.vm.provider :virtualbox do |virtualbox|
             virtualbox.gui    = false
             virtualbox.name   =  'api3.confirmsign.lo'
@@ -25,8 +28,10 @@ Vagrant.configure('2') do |config|
     end  
 
     config.vm.define "cfsweb" do |app|
-        app.vm.network :private_network, ip: "192.168.200.102"
+        app.vm.network :private_network, ip: "192.168.200.102", hostsupdater:
+            aliases = ["0-us.dev", "1-us.dev", "app.confirmsign.dev", "box-b.dev", "box-m.dev", "correosverificado.dev", "e-cfs.dev", "m-cfs.dev", "m-rch.dev", "mrwburofax.dev"]
         app.vm.hostname = 'cfsweb.confirmsign.lo' 
+
         config.vm.provider :virtualbox do |virtualbox|
             virtualbox.gui    = false
             virtualbox.name   =  'cfsweb.confirmsign.lo'
