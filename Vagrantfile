@@ -4,6 +4,12 @@
 unless Vagrant.has_plugin?("vagrant-hostsupdater")
     system "vagrant plugin install vagrant-hostsupdater"
 end
+# Specify Vagrant version and Vagrant API version
+VAGRANTFILE_API_VERSION = "2"
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+
+
+Vagrant.require_version ">= 1.7.4"
 
 Vagrant.configure('2') do |config|
     config.vm.box           = 'opscode-centos-6.5'
@@ -13,8 +19,6 @@ Vagrant.configure('2') do |config|
     config.vm.provision "file",   source: "~/.ssh/id_rsa.pub", destination: "/tmp/authorized_keys"
     config.vm.provision "shell",  inline: 'echo `cat /tmp/authorized_keys` >> /home/vagrant/.ssh/authorized_keys'
     
-
-
     config.vm.define "api3" do |api3|
         api3.vm.network :private_network, ip: "192.168.200.101"
         api3.vm.hostname = 'api3.confirmsign.lo' 

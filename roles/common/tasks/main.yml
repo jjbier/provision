@@ -7,6 +7,7 @@
   yum:  name={{item}} state=present
   when: ansible_os_family == 'RedHat'
   with_items:
+    - epel-release
     - nano
     - autoconf
     - automake
@@ -20,6 +21,9 @@
 - name: Copy files to /etc/skel
   copy: src='{{item}}'  dest='/etc/skel/.{{item}}' owner=root group=root mode=0644
   with_items: files_in_role
+
+- name: Configure gitconfig for all users
+  template: src='{{role_path}}/../git/templates/gitconfig.j2' dest='/etc/skel/.gitconfig' owner=root group=root mode=0644
 
 - name: Add ssh key
   authorized_key: user=root key="{{ default_ssh_pub_key | default(lookup('file', '~/.ssh/id_rsa.pub')) }}" state=present

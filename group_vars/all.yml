@@ -23,6 +23,7 @@ users:
    ssh_key_type: rsa
    ssh_key_bits: 2048
    ssh_key_generate: yes
+   ssh_extra_keys: []
 
  - username: develop
    name: develop user
@@ -34,18 +35,7 @@ users:
    ssh_key_type: rsa
    ssh_key_bits: 2048
    ssh_key_generate: yes
-
-
- - username: deployer
-   name: Deployer user
-   uid: 2003
-   group: deployer
-   groups: ["www-data", "deployers"]
-   authorized_keys: 
-     - "{{default_ssh_pub_key}}"
-   ssh_key_type: rsa
-   ssh_key_bits: 2048
-   ssh_key_generate: yes  
+   ssh_extra_keys: []
 
  - username: www-data
    name: Web Server user
@@ -55,4 +45,19 @@ users:
      - "{{default_ssh_pub_key}}"
    ssh_key_type: rsa
    ssh_key_bits: 2048
-   ssh_key_generate: yes 
+   ssh_key_generate: yes
+   ssh_extra_keys: []
+
+ - username: cfs
+   name: default user
+   group: cfs
+   authorized_keys: 
+     - "{{default_ssh_pub_key}}"
+   ssh_key_type: rsa
+   ssh_key_bits: 2048
+   ssh_key_generate: yes
+   ssh_config:
+     - { alias: 'bitbucket bitbucket.org', hostName: ' bitbucket.org', 'identityFile': '~/.ssh/deploy', user: 'deploy' }
+   ssh_extra_keys:
+     - { file_name: 'deploy.pub' , ssh_key: "{{lookup('file', '~/.ssh/deploy.pub')}}"}
+     - { file_name: 'deploy' , key_value: "{{lookup('file', '~/.ssh/deploy')}}"}

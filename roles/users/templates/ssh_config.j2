@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for item in ssh_config %}
+
+Host {{item.alias}}
+    HostName {{item.hostName}}
+    IdentityFile {{item.identityFile}}
+    User {{item.user}}
+
+{% endfor %}

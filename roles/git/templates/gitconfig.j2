@@ -1,8 +1,8 @@
 [user]
-    name = {{git_user_name}}
-    email = {{git_user_email}}
+    name = "$USER"
+    email = "$USER@confirmsign.com"
 [core]
-    editor = {{git_core_editor}}
+    editor = {{git_core_editor | default('nano')}}
     pager = less
     autocrlf = true
 

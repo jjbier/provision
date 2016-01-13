@@ -3,39 +3,39 @@
   become: true
   become_method: sudo
   roles: 
-    - python
-    - common
-    - SELinux
-    - ntp
+     - python
+     - common
+     - SELinux
+     - ntp
     - users
 
-- hosts: cfs_app
-  become: true
-  become_method: sudo
-  roles: 
-    - nfs-client
-    - memcached
-    - php
-    - composer
-    - wkhtmltopdf
-    - git
+ - hosts: cfs_app
+   become: true
+   become_method: sudo
+   roles:
+     - nfs-client
+     - memcached
+     - php
+     - composer
+     - wkhtmltopdf
+     - git
 
-- hosts: webservers
-  become: true
-  become_method: sudo
-  roles:     
-    - nginx
-    - php-fpm
-    - nodejs
+ - hosts: webservers
+   become: true
+   become_method: sudo
+   roles:
+     - nginx
+     - php-fpm
+     - nodejs
 
-- hosts: demons
-  become: true
-  become_method: sudo  
-  roles: 
-    - cron
+ - hosts: demons
+   become: true
+   become_method: sudo
+   roles:
+     - cron
 
-- hosts: dbservers
-  become: true
-  become_method: sudo
-  roles: 
-    - { role: mysql, when: "stage=='develop'" }
+ - hosts: dbservers
+   become: true
+   become_method: sudo
+   roles:
+     - { role: mysql, when: "stage=='develop'" }
