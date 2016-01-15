@@ -1,0 +1,19 @@
+- hosts: webservers
+  become: true
+  become_method: sudo
+  roles:
+  - python
+  - common
+  - SELinux
+  - ntp
+  - users
+  - nfs-client
+  - memcached
+  - php
+  - composer
+  - wkhtmltopdf
+  - git
+  - nginx
+  - php-fpm
+  - nodejs
+  - deploy

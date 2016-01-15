@@ -10,7 +10,8 @@
     month: "{{ item.month | default(omit) }}"
     name: "{{ item.name | default(item) }}"
     special_time: "{{ item.special_time | default(omit) }}"
-    state: "{{ item.state | default(omit) }}"
+    state: "{{ item.state | default(present) }}"
     user: "{{ item.user | default(cron_service_default_user) }}"
     weekday: "{{ item.weekday | default(omit) }}"
+    disabled: "{{stage == 'develop' }}"
   with_items: cron_tasks

@@ -1,10 +1,13 @@
 # {{ ansible_managed }}
+{% for item in users %}
+{% if item.ssh_config is defined %}
+{% for subItem in item.ssh_config %}
+Host {{subItem.host}}
+    HostName {{subItem.hostname}}
+    User {{subItem.user}}
+    Port {{subItem.port}}
+    IdentityFile {{subItem.identity_file}}
 
-{% for item in ssh_config %}
-
-Host {{item.alias}}
-    HostName {{item.hostName}}
-    IdentityFile {{item.identityFile}}
-    User {{item.user}}
-
+{% endfor %}
+{% endif %}
 {% endfor %}

@@ -6,3 +6,177 @@ cron_service_enabled: yes
 cron_service_state: started
 # The specific user whose crontab should be modified.
 cron_service_default_user: root
+# list of cron entries (@see http://docs.ansible.com/cron_module.html)
+# cron_tasks
+#   - name: ...
+#     cron_file: ...
+#     day: ...
+#     hour: ...
+#     job: ...
+#     minute: ...
+#     month: ...
+#     special_time: ...
+#     state: ...
+#     user: ...
+#     weekday: ...
+#
+cron_tasks:
+  - name: Run EscaneadorXMLBatch
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EscaneadorXMLBatch" --nombre_proceso="Cron_EscaneadorXML"'
+    state: present
+
+  - name: CargadorLotes cada 1 minutos
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "CargadorLotesBatch" --nombre_proceso="Cron_CargadorLotes" --cantidad_max_procesar=15'
+    state: present
+
+  - name: EnviadorPendientes cada 15 segundos (segundo 1)
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_1" --cantidad_max_procesar=15 --force_cpu'
+    state: present
+
+  - name: EnviadorPendientes cada 15 segundos (segundo  5)
+    minute: '*/1'
+    job: 'apache sleep 5 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_2" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  10)
+    minute: '*/1'
+    job: 'apache sleep 10 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_3" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  15)
+    minute: '*/1'
+    job: 'apache sleep 15 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_4" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  20)
+    minute: '*/1'
+    job: 'apache sleep 20 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_5" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  25)
+    minute: '*/1'
+    job: 'apache sleep 25 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_6" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  30)
+    minute: '*/1'
+    job: 'apache sleep 30 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_7" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  35)
+    minute: '*/1'
+    job: 'apache sleep 35 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_8" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  40)
+    minute: '*/1'
+    job: 'apache sleep 40 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_9" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  45)
+    minute: '*/1'
+    job: 'apache sleep 45 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_10" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 15 segundos (segundo  50)
+    minute: '*/1'
+    job: 'apache sleep 50 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_11" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorPendientes cada 55 segundos (segundo  55)
+    minute: '*/1'
+    job: 'apache sleep 55 && php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorPendientesBatch" --nombre_proceso="Cron_Enviador_12" --cantidad_max_procesar=15'
+    state: present
+  - name: EnviadorSMS cada 1 minutos
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorSMSBatch" --nombre_proceso="Cron_EnviadorSMS" --cantidad_max_procesar=500'
+    state: present
+  - name: FinalizadorLotes cada 13 minutos
+    minute: '*/13'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "FinalizadorLotesBatch" --nombre_proceso="Cron_Finalizador'
+    state: present
+
+  - name: IniciadorTareas cada hora (adelanta tareas para las siguientes 8 horas)
+    minute: '*/60'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "IniciadorTareasBatch" --nombre_proceso="Cron_IniciadorTareas" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Rehusador cada 5 minutos
+    minute: '*/5'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "RehusadorBatch" --nombre_proceso="Cron_Rehusador" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Avanzador macros cada 1 minuto
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "AvanzadorPasosMacrosBatch" --nombre_proceso="Cron_AvanzadorMacros" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Activador macros cada 1 minuto
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "ActivadorPasosMacrosBatch" --nombre_proceso="Cron_ActivadorMacros" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Validador de destinatarios cada 1 minuto
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "ValidadorDestinatariosBatch" --nombre_proceso="Cron_ValidadorDestinatarios" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Generador de facturas cada 1 minuto
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "GeneradorFacturasBatch" --nombre_proceso="Cron_GeneradorFacturas" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Emisor de facturas cada 1 minuto
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EmisorFacturasBatch" --nombre_proceso="Cron_EmisorFacturas" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Renovador de packs cada dia 15
+    day: '15'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "RenovadorPacksBatch" --nombre_proceso="Cron_RenovadorPacks" --cantidad_max_procesar=2500'
+    state: present
+
+  - name: Lectura de IADOS MRW cada 2 minutos
+    minute: '*/2'
+    job: 'root wget -O /dev/null http://www.mrwburofax.es/rh1no/iado/leeriado.php >/dev/null 2>&1'
+    state: present
+
+  - name: Lectura de IADOS MRW cada 2 minutos por dentro
+    minute: '*/2'
+    job: 'apache php {{deploy_current_path}}/rh1no/iado/leeriado.php >/dev/null 2>&1'
+    state: present
+
+  - name: Importar rutas MRW
+    hour: '5'
+    job: 'apache php {{deploy_current_path}}/rh1no/iado/leeriado.php >/dev/null 2>&1'
+    state: present
+
+  - name: Importar rutas franquicias
+    hour: '5'
+    minute: '30'
+    job: 'root wget "http://mrwburofax.es/rh1no/_script/importar_franquicias.php?&lanzar=si" >/dev/null 2>&1'
+    state: present
+
+  - name: Especial_Multiple_EscaneadorXML
+    hour: '23'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EscaneadorXMLBatch_Especial_00_00" --nombre_proceso="Cron_Especial_Multiple_EscaneadorXML'
+    state: present
+
+  - name: Especia_15_21_EscaneadorXM
+    hour: '15,21'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EscaneadorXMLBatch_Especial_15_00" --nombre_proceso="Cron_Especia_15_21_EscaneadorXML'
+    state: present
+
+  - name: Especia_15_21_EscaneadorXM
+    minute: '30'
+    hour: '14,20'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EscaneadorXMLBatch_Especial_14_30" --nombre_proceso="Cron_Especial_14_30_EscaneadorXML'
+    state: present
+
+  - name: EnviadorImpresionBatch
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/_script/cron/lanzador_procesos.php "EnviadorImpresionBatch" --nombre_proceso="LotesImpresion"'
+    state: present
+
+  - name: informes_estadisticas_inmediato
+    minute: '*/1'
+    job: 'apache php {{deploy_current_path}}/Cfs/ProcesosCFS/SMS/StatusChecker.php'
+    state: present
+
+  - name: StatusChecker
+    minute: '*/30'
+    job: 'apache curl {{deploy_current_path}}/_script/informes_estadisticas_inmediato.php'
+    state: present

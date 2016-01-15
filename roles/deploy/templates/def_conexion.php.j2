@@ -1,0 +1,16 @@
+<?php
+/*
+ * {{ ansible_managed }}
+ * Manual customization of this file is not recommended.
+ * Aqui se selecciona el entorno
+ */
+{% if stage == 'develop' %}
+define('ENTORNO', 'desarrollo');
+{%elif stage == 'produccion' %}
+define('ENTORNO', 'produccion');
+{%elif stage == 'pre-produccion' %}
+define('ENTORNO', 'preproduccion');
+{%else%}
+define('ENTORNO', 'produccion');
+{% endif %}
+require_once($_SERVER['DOCUMENT_ROOT']."/sistema/_config/".ENTORNO.".php");

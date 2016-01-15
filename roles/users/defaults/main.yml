@@ -17,10 +17,88 @@
 #     ssh_key_password: ""
 #     ssh_key_generate: no
 #     ssh_key: "xxx"
-#
+#     ssh_config
+#     ssh_config:
+#     - host: 'bitbucket bitbucket.org'
+#       hostname: 'bitbucket.org'
+#       identity_file: '~/.ssh/deploy'
+#       user: 'deploy'
+#       port: '22'
+#    ssh_extra_keys: (required)
+#    - file_name: 'deploy.pub'
+#      ssh_key: "{{lookup('file', '~/.ssh/deploy.pub')}}"
+#    - file_name: 'deploy'
+#      ssh_key: "{{lookup('file', '~/.ssh/deploy')}}"
 
 # array of users to add
-users: []
+server_groups:
+ - name: admins
+   gid: 101
+ - name: www-data
+   gid: 102
+ - name: develops
+   gid: 103
+ - name: deployers
+   gid: 104
+ - name: operators
+   gid: 105
+
+users:
+ - username: administrator
+   name: System Admin
+   uid: 2001
+   group: administrator
+   groups: ["admins", "www-data", "develops", "deployers"]
+   authorized_keys:
+     - "{{default_ssh_pub_key}}"
+   ssh_key_type: rsa
+   ssh_key_bits: 2048
+   ssh_key_generate: yes
+   ssh_extra_keys: []
+
+ - username: develop
+   name: develop user
+   uid: 2002
+   group: develop
+   groups: ["www-data", "develops", "deployers"]
+   authorized_keys:
+     - "{{default_ssh_pub_key}}"
+   ssh_key_type: rsa
+   ssh_key_bits: 2048
+   ssh_key_generate: yes
+   ssh_extra_keys: []
+
+ - username: www-data
+   name: Web Server user
+   uid: 2004
+   group: www-data
+   authorized_keys:
+     - "{{default_ssh_pub_key}}"
+   ssh_key_type: rsa
+   ssh_key_bits: 2048
+   ssh_key_generate: yes
+   ssh_extra_keys: []
+
+ - username: cfs
+   name: default user
+   group: cfs
+   authorized_keys:
+     - "{{default_ssh_pub_key}}"
+   ssh_key_type: rsa
+   ssh_key_bits: 2048
+   ssh_key_generate: yes
+   ssh_config:
+   - host: 'bitbucket bitbucket.org'
+     hostname: 'bitbucket.org'
+     identity_file: '~/.ssh/deploy'
+     user: 'deploy'
+     port: '22'
+   ssh_extra_keys:
+    - file_name: 'deploy.pub'
+      ssh_key: "{{lookup('file', '~/.ssh/deploy.pub')}}"
+    - file_name: 'deploy'
+      ssh_key: "{{lookup('file', '~/.ssh/deploy')}}"
+
 # users home directory
 users_home: /home
 # default user primary group for users

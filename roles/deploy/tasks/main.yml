@@ -1,0 +1,37 @@
+---
+# tasks file for deploy
+- name: Create directory structure
+  file: path='{{item}}' state=directory owner={{deploy_owner}} group={{deploy_group}} mode=0775
+  with_items:
+  - '{{deploy_root_path}}'
+  tags:
+    - deploy
+
+- name: Create link shared dir
+  file: src={{ deploy_share_dir_src }} dest={{ deploy_share_dir_dest }} state=link owner={{deploy_owner}} group={{deploy_group}} mode=0775
+  tags:
+    - deploy
+
+- name: Ensures {{deploy_share_dir_dest}}/sistema/_inc dir exists
+  file: path={{deploy_share_dir_dest}}/sistema/_inc state=directory
+  tags:
+    - deploy
+
+- name: Ensures {{deploy_share_dir_dest}}/sistema/_inc dir exists
+  file: path={{deploy_share_dir_dest}}/sistema/_config state=directory
+  tags:
+    - deploy
+
+- name: Copy in shared files def_conexion
+  template: src=def_conexion.php.j2 dest='{{deploy_share_dir_dest}}/sistema/_inc/def_conexion.php' owner={{deploy_owner}} group={{deploy_group}} mode=0775
+  tags:
+    - deploy
+
+- name: Copy in shared files deploy environment config
+  copy: src="{{item}}.php" dest="{{deploy_share_dir_dest}}/sistema/_config/{{item}}.php" owner={{deploy_owner}} group={{deploy_group}} mode=0775
+  with_items:
+  - 'desarrollo'
+  - 'produccion'
+  - 'preproduccion'
+  tags:
+    - deploy

@@ -1,0 +1,11 @@
+
+- hosts: dbservers
+  become: true
+  become_method: sudo
+  roles:
+  - python
+  - common
+  - SELinux
+  - ntp
+  - users
+  - { role: mysql, when: "stage=='develop'" }

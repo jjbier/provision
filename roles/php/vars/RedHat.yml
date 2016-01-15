@@ -1,26 +1,227 @@
 #pakages and modules
-php_modules: []
+#all pakages
+#- php
+#- php-devel
+#- php-bcmath
+#- php-cli
+#- php-common
+#- php-dba
+#- php-dbg
+#- php-embedded
+#- php-enchant
+#- php-ffmpeg
+#- php-fpm
+#- php-gd
+#- php-gmp
+#- php-horde-horde-lz4
+#- php-idn
+#- php-imap
+#- php-interbase
+#- php-intl
+#- php-ioncube-loader
+#- php-ldap
+#- php-libvirt
+#- php-libvirt-doc
+#- php-litespeed
+#- php-magickwand
+#- php-mbstring
+#- php-mcrypt
+#- php-mssql
+#- php-mysqlnd
+#- php-oci8
+#- php-odbc
+#- php-opcache
+#- php-pdo
+#- php-pecl-amqp
+#- php-pecl-apcu
+#- php-pecl-apfd
+#- php-pecl-apm
+#- php-pecl-ares
+#- php-pecl-bbcode
+#- php-pecl-binpack
+#- php-pecl-bitset
+#- php-pecl-blenc
+#- php-pecl-cairo
+#- php-pecl-cassandra
+#- php-pecl-chdb
+#- php-pecl-couchbase
+#- php-pecl-couchbase2
+#- php-pecl-crypto
+#- php-pecl-dbase
+#- php-pecl-dbus
+#- php-pecl-dio
+#- php-pecl-dom-varimport
+#- php-pecl-doublemetaphone
+#- php-pecl-eio
+#- php-pecl-env
+#- php-pecl-ev
+#- php-pecl-event
+#- php-pecl-expect
+#- php-pecl-fann
+#- php-pecl-gearman
+#- php-pecl-gender
+#- php-pecl-geoip
+#- php-pecl-geospatial
+#- php-pecl-gmagick
+#- php-pecl-gnupg
+#- php-pecl-graphdat
+#- php-pecl-haru
+#- php-pecl-hidef
+#- php-pecl-hprose
+#- php-pecl-hrtime
+#- php-pecl-http
+#- php-pecl-igbinary
+#- php-pecl-imagick
+#- php-pecl-inclued
+#- php-pecl-inotify
+#- php-pecl-ircclient
+#- php-pecl-json-post
+#- php-pecl-jsonc
+#- php-pecl-jsond
+#- php-pecl-judy
+#- php-pecl-krb5
+#- php-pecl-leveldb
+#- php-pecl-libsodium
+#- php-pecl-lua
+#- php-pecl-lzf
+#- php-pecl-mailparse
+#- php-pecl-memcache
+#- php-pecl-memcached
+#- php-pecl-memprof
+#- php-pecl-mogilefs
+#- php-pecl-mongo
+#- php-pecl-mongodb
+#- php-pecl-msgpack
+#- php-pecl-mysqlnd-ms
+#- php-pecl-mysqlnd-qc
+#- php-pecl-ncurses
+#- php-pecl-newt
+#- php-pecl-oauth
+#- php-pecl-parsekit
+#- php-pecl-pcs
+#- php-pecl-pcsc
+#- php-pecl-pdflib
+#- php-pecl-phk
+#- php-pecl-propro
+#- php-pecl-protocolbuffers
+#- php-pecl-pthreads
+#- php-pecl-qb
+#- php-pecl-quickhash
+#- php-pecl-radius
+#- php-pecl-raphf
+#- php-pecl-rar
+#- php-pecl-rdkafka
+#- php-pecl-redis
+#- php-pecl-riak
+#- php-pecl-rrd
+#- php-pecl-runkit
+#- php-pecl-scream
+#- php-pecl-scrypt
+#- php-pecl-sdl
+#- php-pecl-seaslog
+#- php-pecl-selinux
+#- php-pecl-solr
+#- php-pecl-solr2
+#- php-pecl-sphinx
+#- php-pecl-spl-types
+#- php-pecl-sqlite
+#- php-pecl-ssdeep
+#- php-pecl-ssh2
+#- php-pecl-stats
+#- php-pecl-stomp
+#- php-pecl-strict
+#- php-pecl-sundown
+#- php-pecl-swoole
+#- php-pecl-sync
+#- php-pecl-termbox
+#- php-pecl-trace
+#- php-pecl-trader
+#- php-pecl-translit
+#- php-pecl-uopz
+#- php-pecl-uploadprogress
+#- php-pecl-uri-template
+#- php-pecl-uuid
+#- php-pecl-vld
+#- php-pecl-weakref
+#- php-pecl-xattr
+#- php-pecl-xdebug
+#- php-pecl-xhprof
+#- php-pecl-xmldiff
+#- php-pecl-xmp
+#- php-pecl-xrange
+#- php-pecl-xslcache
+#- php-pecl-xxtea
+#- php-pecl-yac
+#- php-pecl-yaf
+#- php-pecl-yaml
+#- php-pecl-yar
+#- php-pecl-yaz
+#- php-pecl-yp
+#- php-pecl-zip
+#- php-pecl-zmq
+#- php-pgsql
+#- php-phalcon
+#- php-phalcon2
+#- php-phurple
+#- php-pimple
+#- php-pimple-lib
+#- php-process
+#- php-pspell
+#- php-recode
+#- php-shout
+#- php-smbclient
+#- php-snmp
+#- php-soap
+#- php-suhosin
+#- php-tidy
+#- php-twig
+#- php-twig-ctwig
+#- php-xcache
+#- php-xml
+#- php-xmlrpc
+#- php-yac
+
+php_modules:
+  - sysvmsg
+  - sysvsem
+  - sysvshm
+  - wddx
+  - ftp
 php_packages:
   - php
+  - php-devel
+  - php-bcmath
   - php-cli
   - php-common
+  - php-curl
+  - php-dba
   - php-gd
   - php-imap
   - php-intl
-  - php-opcache
+  - php-ldap
   - php-mbstring
+  - php-mcrypt
   - php-mysqlnd
-  - php-xml
-  - php-xmlrpc
-  - php-curl
-  - php-pecl-memcache
+  - php-opcache
+  - php-pdo
   - php-pecl-apcu
   - php-pecl-inotify
-
-php_develop_packages: 
+  - php-pecl-json-post
+  - php-pecl-jsonc
+  - php-pecl-jsond
+  - php-pecl-memcache
+  - php-pecl-sqlite
+  - php-pecl-spl-types
+  - php-pecl-xslcache
+  - php-pecl-zip
+  - php-snmp
+  - php-soap
+  - php-xml
+  - php-xmlrpc
+php_develop_packages:
   - php-pecl-xdebug
 
-#configs 
+#configs
 config_directory: /etc
 php_config_file: /etc/php.ini
 php_modules_dir: /etc/php.d

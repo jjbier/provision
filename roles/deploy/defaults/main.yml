@@ -1,0 +1,9 @@
+---
+# defaults file for deploy
+deploy_root_path: '/home/cfs/public_html'
+deploy_share_dir_dest: '{{deploy_root_path}}/shared'
+deploy_share_dir_src: '/media/confirmsign.com'
+
+deploy_owner: 'www-data'
+deploy_group: 'cfs'
+

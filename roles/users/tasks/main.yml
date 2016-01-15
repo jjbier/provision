@@ -63,21 +63,22 @@
 - name: Adding user's ssh extra keys
   template:
     src: ssh_extra_keys.j2
-    dest: "{{ item.home|default(users_home ~ '/' ~ item.username) }}/.ssh/item.1.file_name }}"
+    dest: "{{ item.0.home|default(users_home ~ '/' ~ item.0.username) }}/.ssh/{{item.1.file_name}}"
     owner: "{{ item.0.username }}"
     group: "{{ item.0.group if item.0.group is defined else (users_group if users_group else item.0.username) }}"
     mode: 0600
-  when: item.0.ssh_extra_keys is defined
+  when: item.0.home_create is not defined or item.0.home_create and item.1.file_name is defined
   with_subelements:
     - users
     - ssh_extra_keys
 
-#- name: Adding ssh config
-#  file:
-#    src: ssh_config.j2
-#    dest: "{{ item.home|default(users_home ~ '/' ~ item.username) }}/.ssh/config }}"
-#    owner: "{{ item.username }}"
-#    group: "{{ item.group if item.group is defined else (users_group if users_group else item.username) }}"
-#  with_items:
-#    - users
 
+- name: Adding ssh config
+  template:
+    src: ssh_config.j2
+    dest: "{{ item.home|default(users_home ~ '/' ~ item.username) }}/.ssh/config"
+    owner: "{{ item.username }}"
+    group: "{{ item.group if item.group is defined else (users_group if users_group else item.username) }}"
+    mode: 0600
+  when: item.home_create is not defined or item.home_create
+  with_items: users
