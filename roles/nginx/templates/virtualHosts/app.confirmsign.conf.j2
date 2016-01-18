@@ -1,0 +1,129 @@
+# {{ ansible_managed }}
+# Manual customization of this file is not recommended.
+
+
+{% if nginx_use_ssl %}
+
+server{
+  listen 80;
+  listen [::]:80;
+  server_name  {% for hostItem in nginx_servers_name %} {{hostItem}} {% endfor %};
+  rewrite ^ https://$host$request_uri? permanent;
+}
+
+
+map $scheme $sts {
+  https "max-age={{ nginx_ssl_strict_transport_header_age }}; includeSubdomains;";
+}
+{% endif %}
+
+{% if (nginx_base_redirect_to_www) %}
+server {
+  listen {{ nginx_listen }};
+  server_name {{ nginx_base_domain }};
+  return 301 $scheme://www.{{ nginx_base_domain }}$request_uri;
+}
+{% endif %}
+
+server {
+    server_name  {% for hostItem in nginx_servers_name %} {{hostItem}} {% endfor %};
+    
+{% if nginx_use_ssl %}
+    listen 443;
+    ssl                  on;
+    ssl_certificate     '{{nginx_ssl_src_path}}/{{SSLCertificateFile}}';
+    ssl_certificate_key '{{nginx_ssl_src_path}}/{{SSLCertificateKeyFile}}';
+    {% if stage == 'production' %}
+    ssl_trusted_certificate '{{nginx_ssl_src_path}}/{{SSLCertificateChainFile}}';
+    {% endif %}
+    {% else %}
+    listen 80;
+    listen [::]:80;
+{% endif %}
+
+    root   {{ nginx_root_path | default('/usr/share/nginx/html') }};
+    index  {{ 'index.php' if use_php_fpm else '' }} index.html index.htm;
+
+    # Hide Nginx Server Tokens / Hide Nginx version number
+    server_tokens {{ 'on' if nginx_server_tokens else 'off' }}; 
+    # Request max body size
+    client_max_body_size {{ nginx_client_max_body_size | default('20m')}};
+    # Upload Max Body Size
+    client_body_buffer_size {{ nginx_client_body_buffer_size | default('128k')}};
+
+    # Robots file not put in log
+    location /robots.txt {
+        access_log off;
+        log_not_found off;
+        rewrite ^/robots.txt /robots.php redirect;
+    }
+
+    # Rewrite write.php this rule is add by Karlos Presumido fon branch CFS-1154_NuevoDiseñoCF
+    location /write.php {
+        access_log off;
+        log_not_found off;
+        rewrite ^/write.php\?(.*) /write.html?$1 redirect;
+    }
+
+{% if nginx_assets_enabled %}
+    #Cache Control for Static Files    
+    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+        access_log        off;
+        log_not_found     off;
+        expires           360d;
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+    }
+{% endif %}
+
+    # Prevent (deny) Access to Hidden Files
+    location ~ /\. {
+        access_log off;
+        log_not_found off; 
+        deny all;
+    }     
+
+    # Prevent (deny) Access to temporary files created when editing files.
+    location ~ ~$ {
+        access_log off;
+        log_not_found off;
+        deny all;
+    }
+
+    # Prevent (deny) Access to this dirs.
+    location ~ /({% for locationDenyItem in nginx_directory_deny %}{{locationDenyItem}}{% if not loop.last %}|{% endif %}{% endfor %}) {
+        access_log off;
+        log_not_found off;
+        deny all;
+    }   
+
+
+    {% for errorItemItem in nginx_error_pages %} 
+        error_page {{errorItemItem.code}} {{errorItemItem.page}};
+    {% endfor %}
+
+    # redirect server error pages to the static page /50x.html
+    #    
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+   
+{% if use_php_fpm %}    
+    location ~ \.php$ {
+        fastcgi_index  index.php;
+        include '{{nginx_config_path}}/fastcgi_params.conf';    
+        fastcgi_pass php-upstream;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS off;        
+    } 
+{% endif %}
+
+{% if nginx_use_ssl %}
+    include /etc/nginx/conf.d/ssl.conf;
+{% endif %}
+    
+    # Default site locations 
+    include '{{nginx_location_path}}/*.conf';
+}

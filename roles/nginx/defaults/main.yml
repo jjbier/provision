@@ -1,0 +1,96 @@
+---
+# Nginx process
+nginx_user: www-data
+nginx_group: www-data
+nginx_worker_process: 2
+nginx_worker_rlimit_nofile: 65535
+
+# Config for optimize nginx
+nginx_max_connections: 1024
+nginx_multi_accept: off
+nginx_names_hash_bucket_size: 64
+
+nginx_sendfile: false
+nginx_tcp_nopush: false
+nginx_tcp_nodelay: false
+nginx_server_tokens: false
+
+nginx_keepalive_timeout: 30
+nginx_types_hash_max_size: 2048
+
+nginx_client_max_body_size: 200M
+nginx_client_body_buffer_size: 128k
+nginx_default_type: 'text/html'
+nginx_use_gzip: true
+
+# Logs files
+nginx_error_log_file:  '/var/log/nginx/app.confirmsign-error.log'
+nginx_error_log_file_easy_movil: '/var/log/nginx/easy_movil-error.log'
+nginx_error_log_level: warn
+nginx_access_log_file:  /var/log/nginx/access.log
+nginx_access_log_level: main
+
+# Default server config for a
+nginx_root_path: '/home/cfs/public_html/current'
+nginx_base_domain: "{{ ansible_fqdn }}"
+nginx_server_name: "{{ nginx_base_domain }}"
+nginx_base_redirect_to_www: false
+nginx_config_path: '/etc/nginx/conf.d'
+nginx_sites_path: '/etc/nginx/sites-enabled'
+nginx_assets_enabled: True
+nginx_assets_regex: ~ ^/(system|assets)/
+nginx_error_pages:
+  - { code: 404, page: /404.html }
+  - { code: 500, page: /500.html }
+  - { code: 502 503 504, page: /502.html }
+
+# Virtual host
+nginx_virtual_host:
+  - 'app.confirmsign'
+  - 'easy_movil'
+  - 'symfony'
+
+nginx_location_path: '/etc/nginx/locations.d'
+nginx_locations:
+  - 'wp-content'
+  - 'sistema4'
+  - 'sistema'
+  - 'veremail'
+  - 'easy'
+  - 'sf'
+
+
+nginx_directory_deny:
+  - '/sso/coafga'
+  - '/_log'
+  - '/.git'
+  - '/_test'
+  - '/easyOLD'
+  - '/test'
+  - '/testSelenium'
+  - '/tools'
+  - '/_ftp'
+  - '/tools'
+
+# config for symfony virtual host
+nginx_symfony_path: '{{nginx_root_path}}/sf/web'
+
+# config for easy movil virtual host
+easyMobil_root_path: '{{nginx_root_path}}/easy/movil'
+
+
+nginx_use_ssl: true
+nginx_spdy_enabled: true
+nginx_certificates_local_path: '{{role_path}}/files/certificates.{{stage}}'
+nginx_ssl_src_path: '/etc/nginx/ssl'
+nginx_ssl_strict_transport_header_age: 31536000
+
+#ssl_certificate
+SSLCertificateFile: app.confirmsign.com.crt
+#ssl_certificate_key
+SSLCertificateKeyFile: app.confirmsign.com.key
+#Intermediate Certificate
+SSLCertificateChainFile: CA_Certificados.crt
+
+# PHP FPM
+use_php_fpm: true

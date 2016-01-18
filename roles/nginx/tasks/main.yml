@@ -1,0 +1,43 @@
+---
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: "(System) ensure the 'nginx_user' exists"
+  user: name={{ nginx_user }} state=present
+
+- name: "Creates web root directories."
+  file: path={{item}} state=directory  mode=0774 owner={{nginx_user}} group=cfs
+  with_items:     
+    - '{{nginx_root_path}}'
+
+- name: "(System) configure nginx."
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf mode=0644 owner=root group=root force=true
+
+- name: "(System) configure gzip."
+  template: src=conf/gzip.conf.j2 dest='{{nginx_config_path}}/gzip.conf' mode=0644 owner=root group=root force=true
+  when: nginx_use_gzip|bool == true
+
+- include: ssl.yml
+  when: nginx_use_ssl|bool == true
+
+- name: Copy fastcgi_params file
+  template: src='php_fpm/fastcgi_params.conf.j2' dest='{{nginx_config_path}}/fastcgi_params.conf' mode=0644 owner=root group=root 
+  when: use_php_fpm|bool == True
+
+- name: Copy upstream.conf
+  template: src='php_fpm/upstream.conf.j2' dest='{{nginx_config_path}}/upstream.conf' mode=0644 owner=root group=root 
+  when: use_php_fpm|bool == true
+
+- name: "(System) add virtualHosts"
+  template: src='virtualHosts/{{item}}.conf.j2' dest='{{nginx_sites_path}}/{{item}}.conf' mode=0644  owner='{{ nginx_user }}' group='{{ nginx_group }}' force=true
+  with_items: nginx_virtual_host
+
+- name: "(System) add locations for default virtual host"
+  template: src='locations/{{item}}.conf.j2' dest='{{nginx_location_path}}/{{item}}.conf' mode=0644  owner='{{ nginx_user }}' group='{{ nginx_group }}' force=true
+  with_items: nginx_locations
+
+- name: "(System) ensure the 'nginx_user' exists."
+  user: name={{ nginx_user }} state=present
+
+- name: "(System) reload and enable service."
+  service: name=nginx state=reloaded

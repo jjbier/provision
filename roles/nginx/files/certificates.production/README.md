@@ -1,0 +1,1 @@
+Configure var nginx_ssl_local_path:~/certifications, in group_vars/production:webservers.yml, for example: nginx_ssl_local_path:~/certifications

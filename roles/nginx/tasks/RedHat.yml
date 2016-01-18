@@ -1,0 +1,31 @@
+---
+- name: (RedHat) add nginx repo file.
+  template: src=redhat.repo.j2 dest=/etc/yum.repos.d/nginx.repo owner=root group=root mode=0644
+
+- name: (RedHat) ensure RPM official nginx key
+  rpm_key: key=http://nginx.org/keys/nginx_signing.key
+
+- name: (RedHat) install Nginx.
+  yum:  name=nginx enablerepo=nginx state=present
+
+- name: "(RedHat) remove default sites files"
+  file: path={{nginx_config_path}}/{{ item }}.conf state=absent
+  with_items:
+    - default
+    - example_ssl
+
+- name: "(RedHat) remove default config files"
+  file: path='/etc/nginx/{{ item }}' state=absent
+  with_items:
+    - fastcgi_params
+    - koi-utf
+    - koi-win
+    - scgi_params
+    - uwsgi_params
+    - win-utf
+
+- name: "(RedHat) creates web site directories."
+  file: path={{item}} state=directory owner=root group=root mode=0644
+  with_items:     
+    - '{{ nginx_config_path }}'
+    - '{{ nginx_location_path }}'

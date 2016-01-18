@@ -1,0 +1,14 @@
+- name: "(System) copy the ssl config to the server"
+  template: src=conf/ssl.conf.j2 dest=/etc/nginx/conf.d/ssl.conf mode=0644 owner=root group=root
+  tags:
+    - nginx
+
+- name: "(System) create the directory to put the ssl certificate"
+  file: path=/etc/nginx/ssl mode=0755 owner=root group=root state=directory
+  tags:
+    - nginx
+
+- name: "(System) Copy certificates to server"
+  copy: src="{{item}}" dest="{{nginx_ssl_src_path}}" owner="root" group="root" mode="600"
+  with_fileglob: 
+   - "{{nginx_certificates_local_path}}/*"

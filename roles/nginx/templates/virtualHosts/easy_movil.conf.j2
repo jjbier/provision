@@ -1,0 +1,73 @@
+# {{ ansible_managed }}
+# Manual customization of this file is not recommended.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name  {% for hostItem in easyMobil_servers_name %} {{hostItem}} {% endfor %};
+
+    root   {{ easyMobil_root_path | default(nginx_root_path) }};
+    index  {{ 'index.php' if use_php_fpm else '' }} index.html index.htm;
+
+    # Hide Nginx Server Tokens / Hide Nginx version number
+    server_tokens {{ 'on' if nginx_server_tokens else 'off' }}; 
+    # Request max body size
+    client_max_body_size {{ nginx_client_max_body_size | default('20m')}};
+    # Upload Max Body Size
+    client_body_buffer_size {{ nginx_client_body_buffer_size | default('128k')}};
+
+    # Robots file not put in log
+    location /robots.txt {
+        access_log off;
+        log_not_found off;
+    }
+
+{% if nginx_assets_enabled %}
+    #Cache Control for Static Files    
+    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+        access_log        off;
+        log_not_found     off;
+        expires           360d;
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+    }
+{% endif %}
+
+    # Prevent (deny) Access to Hidden Files
+    location ~ /\. {
+        access_log off;
+        log_not_found off; 
+        deny all;
+    }     
+
+    # Prevent (deny) Access to temporary files created when editing files.
+    location ~ ~$ {
+        access_log off;
+        log_not_found off;
+        deny all;
+    }
+
+
+    {% for errorItemItem in nginx_error_pages %} 
+        error_page {{errorItemItem.code}} {{errorItemItem.page}};
+    {% endfor %}
+    # redirect server error pages to the static page /50x.html
+    #
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+   
+{% if use_php_fpm %}    
+    location ~ \.php$ {
+        fastcgi_index  index.php;
+        include '{{nginx_config_path}}/fastcgi_params.conf';    
+        fastcgi_pass php-upstream;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS off;        
+    } 
+{% endif %}
+
+    error_log  {{nginx_error_log_file_easy_movil | default('/var/log/nginx/error-easy_movil.log')}} {{ nginx_error_log_level | default('warn')}};
+}
